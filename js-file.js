@@ -124,6 +124,7 @@ function GameController(
 
   let activePlayer = players[0];
   let gameOver = false;
+  let lastWinner = null; // <-- Track winner for UI
 
   const switchPlayerTurn = () => {
     activePlayer = activePlayer === players[0] ? players[1] : players[0];
@@ -157,10 +158,12 @@ function GameController(
     if (winner === 1 || winner === 2) {
       console.log(`${players[winner - 1].name} wins!`);
       gameOver = true;
+      lastWinner = winner;
       return;
     } else if (winner === "tie") {
       console.log("It's a tie!");
       gameOver = true;
+      lastWinner = "tie";
       return;
     }
 
@@ -174,7 +177,10 @@ function GameController(
   return {
     playRound,
     getActivePlayer,
-    getBoard: board.getBoard // <-- Expose getBoard method
+    getBoard: board.getBoard, // <-- Expose getBoard method
+    isGameOver: () => gameOver, // <-- Expose gameOver
+    getWinner: () => lastWinner, // <-- Expose winner
+    getPlayers: () => players // <-- Expose players for UI
   };
 }
 
@@ -211,8 +217,18 @@ const ScreenController = (() => {
       }
       boardContainer.appendChild(rowDiv);
     }
-    // Show current player's turn
-    if (typeof game.getActivePlayer === 'function') {
+    // Show current player's turn or game over status
+    if (typeof game.isGameOver === 'function' && game.isGameOver()) {
+      const winner = typeof game.getWinner === 'function' ? game.getWinner() : null;
+      if (winner === 1 || winner === 2) {
+        const players = typeof game.getPlayers === 'function' ? game.getPlayers() : [];
+        statusDiv.textContent = `${players[winner - 1]?.name || "Player"} wins! Game Over.`;
+      } else if (winner === "tie") {
+        statusDiv.textContent = "It's a tie! Game Over.";
+      } else {
+        statusDiv.textContent = "Game Over.";
+      }
+    } else if (typeof game.getActivePlayer === 'function') {
       statusDiv.textContent = `${game.getActivePlayer().name}'s turn`;
     }
   }
