@@ -1,8 +1,3 @@
-const p = document.createElement("p");
-p.textContent = "Hey I'm red!";
-p.style.cssText = "color: blue";
-document.body.appendChild(p);
-
 /*
 ** The Gameboard represents the state of the board
 ** Each square holds a Cell (defined later)
