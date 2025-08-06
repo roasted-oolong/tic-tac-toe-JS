@@ -131,6 +131,12 @@ function GameController(
   };
   const getActivePlayer = () => activePlayer;
 
+  // Allow changing player names
+  const setPlayerNames = (name1, name2) => {
+    players[0].name = name1 || "Player One";
+    players[1].name = name2 || "Player Two";
+  };
+
   const printNewRound = () => {
     board.printBoard();
     if (!gameOver) {
@@ -180,7 +186,8 @@ function GameController(
     getBoard: board.getBoard, // <-- Expose getBoard method
     isGameOver: () => gameOver, // <-- Expose gameOver
     getWinner: () => lastWinner, // <-- Expose winner
-    getPlayers: () => players // <-- Expose players for UI
+    getPlayers: () => players, // <-- Expose players for UI
+    setPlayerNames // <-- Expose setPlayerNames
   };
 }
 
@@ -193,6 +200,21 @@ const ScreenController = (() => {
   const boardContainer = document.getElementById('game-board');
   const statusDiv = document.getElementById('game-status');
   const restartBtn = document.getElementById('restart-btn');
+  const player1Input = document.getElementById('player1-name');
+  const player2Input = document.getElementById('player2-name');
+  const setNamesBtn = document.getElementById('set-names-btn');
+
+  // Set player names from input fields
+  if (setNamesBtn) {
+    setNamesBtn.addEventListener('click', () => {
+      const name1 = player1Input.value || 'Player One';
+      const name2 = player2Input.value || 'Player Two';
+      if (typeof game.setPlayerNames === 'function') {
+        game.setPlayerNames(name1, name2);
+      }
+      updateScreen();
+    });
+  }
 
   // Redraws the board and sets up cell buttons
   function updateScreen() {
