@@ -184,23 +184,21 @@ function GameController(
   };
 }
 
-const game = GameController();
+// Make game variable accessible for restart
+let game = GameController();
 
 // ScreenController module
 const ScreenController = (() => {
-  const boardContainer = document.createElement('div');
-  boardContainer.id = 'board-container';
-  document.body.appendChild(boardContainer);
-
-  const statusDiv = document.createElement('div');
-  statusDiv.id = 'status';
-  document.body.appendChild(statusDiv);
+  // Use the containers from the HTML
+  const boardContainer = document.getElementById('game-board');
+  const statusDiv = document.getElementById('game-status');
+  const restartBtn = document.getElementById('restart-btn');
 
   // Redraws the board and sets up cell buttons
   function updateScreen() {
     // Clear board
     boardContainer.innerHTML = '';
-    const board = game.getBoard ? game.getBoard() : []; // <-- Use game.getBoard()
+    const board = game.getBoard ? game.getBoard() : [];
     // Draw board
     for (let i = 0; i < 3; i++) {
       const rowDiv = document.createElement('div');
@@ -239,6 +237,14 @@ const ScreenController = (() => {
     const col = parseInt(e.target.getAttribute('data-col'));
     game.playRound(row, col);
     updateScreen();
+  }
+
+  // Add restart button logic
+  if (restartBtn) {
+    restartBtn.addEventListener('click', () => {
+      game = GameController(); // New game instance
+      updateScreen();
+    });
   }
 
   // Initial render

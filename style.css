@@ -65,6 +65,7 @@ p {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 1.5rem; /* add vertical gap between children */
 }
 
 #board-container {
@@ -73,7 +74,7 @@ p {
   grid-template-rows: repeat(3);
   grid-template-columns: repeat(3);
   gap: 8px;
-  margin: 1rem 0;
+  margin: 1rem 0 1.5rem 0; /* add more space below board */
 }
 
 .board-row {
@@ -103,6 +104,13 @@ p {
   flex-direction: column;
   align-items: center;
   font-size: 1.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem; /* increased space below status */
   min-height: 2rem;
+}
+
+/* Add margin to restart button if it exists */
+#restart-btn {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding: .5rem;
 }
