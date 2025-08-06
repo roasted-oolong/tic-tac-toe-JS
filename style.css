@@ -60,6 +60,10 @@ p {
   margin-top: 2rem;
 }
 
+.player-names {
+  margin-bottom: 1rem;
+}
+
 #game-area {
   width: 100%;
   display: flex;
